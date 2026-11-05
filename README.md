@@ -70,8 +70,7 @@ DATABASE_URL=postgres://user:password@host:port/dbname
 FRONTEND_URL=http://localhost:3000
 DEPLOYED_FRONTEND_URL=https://your-vercel-domain.app
 SUPABASE_URL=https://[project-ref].supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_SECRET_KEY=sb_secret_...
 # Optional — powers GET /courses/video-duration (module time estimate from a
 # YouTube video's real length). Without it that endpoint just reports the
 # video as unsupported and the trainer enters module time manually.
@@ -83,10 +82,12 @@ YOUTUBE_API_KEY=your-youtube-data-api-v3-key
 **frontend/.env**
 
 ```
-VITE_APP_API_URL=http://localhost:4000
-VITE_APP_SUPABASE_URL=https://[project-ref].supabase.co
-VITE_APP_SUPABASE_ANON_KEY=your-anon-key
+VITE_API_URL=http://localhost:4000
+VITE_SUPABASE_URL=https://[project-ref].supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
+
+Copy the publishable (`sb_publishable_...`) and secret (`sb_secret_...`) keys from the Supabase dashboard under **Settings > API Keys**. Do not use the legacy JWT `anon` / `service_role` keys — they are deprecated at the end of 2026.
 
 **First-time setup**
 

@@ -46,8 +46,8 @@
 //
 //   npm run seed:accounts
 //
-// Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env (same as
-// wipe-test-data.ts — the service_role key, not the anon key).
+// Requires SUPABASE_URL and SUPABASE_SECRET_KEY in .env (same as
+// wipe-test-data.ts — the secret key, not the publishable key).
 
 import 'dotenv/config';
 import * as crypto from 'crypto';
@@ -272,12 +272,12 @@ async function listAllAuthUsers(
 
 async function main() {
   const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!supabaseUrl || !secretKey) {
     throw new Error(
-      'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env to run this script — ' +
-        'the service_role key (not the anon key) is required to create auth users.',
+      'SUPABASE_URL and SUPABASE_SECRET_KEY must be set in .env to run this script — ' +
+        'the secret key (sb_secret_..., not the publishable key) is required to create auth users.',
     );
   }
 
@@ -288,7 +288,7 @@ async function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const supabaseAdmin: SupabaseClient = createClient(
     supabaseUrl,
-    serviceRoleKey,
+    secretKey,
     {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       realtime: { transport: ws as any },

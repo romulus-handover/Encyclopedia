@@ -21,9 +21,9 @@
 //   npm run wipe:test-data            # dry run — prints counts only
 //   npm run wipe:test-data -- --confirm   # actually deletes everything
 //
-// Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env (the
-// service_role key, not the anon key — copy it from the Supabase
-// dashboard under Project Settings > API. Never commit it).
+// Requires SUPABASE_URL and SUPABASE_SECRET_KEY in .env (the
+// secret key, not the publishable key — copy sb_secret_... from
+// Supabase Settings > API Keys. Never commit it).
 
 import 'dotenv/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
@@ -98,12 +98,12 @@ async function main() {
   const confirmed = process.argv.includes('--confirm');
 
   const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!supabaseUrl || !secretKey) {
     throw new Error(
-      'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env to run this script — ' +
-        'the service_role key (not the anon key) is required to delete auth users.',
+      'SUPABASE_URL and SUPABASE_SECRET_KEY must be set in .env to run this script — ' +
+        'the secret key (sb_secret_..., not the publishable key) is required to delete auth users.',
     );
   }
 
@@ -119,7 +119,7 @@ async function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const supabaseAdmin: SupabaseClient = createClient(
     supabaseUrl,
-    serviceRoleKey,
+    secretKey,
     {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       realtime: { transport: ws as any },

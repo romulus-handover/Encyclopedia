@@ -38,7 +38,7 @@
 //
 //   npm run seed:providers
 //
-// Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env (same as
+// Requires SUPABASE_URL and SUPABASE_SECRET_KEY in .env (same as
 // wipe-test-data.ts / seed-accounts.ts).
 
 import 'dotenv/config';
@@ -168,18 +168,18 @@ async function generateUniqueInviteCode(
 
 async function main() {
   const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const secretKey = process.env.SUPABASE_SECRET_KEY;
 
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!supabaseUrl || !secretKey) {
     throw new Error(
-      'SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in .env to run this script.',
+      'SUPABASE_URL and SUPABASE_SECRET_KEY must be set in .env to run this script.',
     );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const supabaseAdmin: SupabaseClient = createClient(
     supabaseUrl,
-    serviceRoleKey,
+    secretKey,
     {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       realtime: { transport: ws as any },

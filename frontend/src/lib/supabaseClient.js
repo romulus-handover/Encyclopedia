@@ -1,8 +1,15 @@
 import { AuthClient } from '@supabase/auth-js';
 
 // #431 — CRA -> Vite migration: process.env.REACT_APP_* -> import.meta.env.VITE_*.
+// Publishable key (sb_publishable_...) replaces the legacy JWT anon key.
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+if (!supabaseUrl || !supabasePublishableKey) {
+  throw new Error(
+    'Missing VITE_SUPABASE_URL or VITE_SUPABASE_PUBLISHABLE_KEY. Copy frontend/.env.example to frontend/.env.local and use the publishable key from Supabase Settings > API Keys.',
+  );
+}
 
 // Bundle-size fix — this app only ever calls supabase.auth.* (sign in/up/out,
 // session, password reset, OAuth). It never queries Postgres directly, never
@@ -28,8 +35,9 @@ export const supabase = {
   auth: new AuthClient({
     url: `${supabaseUrl}/auth/v1`,
     headers: {
-      Authorization: `Bearer ${supabaseAnonKey}`,
-      apikey: supabaseAnonKey,
+      // New API keys are not JWTs. Send them only as apikey; Authorization
+      // is reserved for the user's session token after sign-in.
+      apikey: supabasePublishableKey,
     },
     storageKey: `sb-${projectRef}-auth-token`,
     autoRefreshToken: true,
